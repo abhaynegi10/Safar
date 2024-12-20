@@ -16,9 +16,9 @@ class HotelCarousel extends StatelessWidget {
               Text(
                 'Exclusive Hotels',
                 style: TextStyle(
-                  fontSize: 22.0,
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5,
+                  letterSpacing: 1.0,
                 ),
               ),
               GestureDetector(
@@ -37,7 +37,7 @@ class HotelCarousel extends StatelessWidget {
           ),
         ),
         Container(
-          height: 300.0,
+          height: 330.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: hotels.length,

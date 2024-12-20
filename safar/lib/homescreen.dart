@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentTab = 0;
 
   // Icons for the top menu
-  List<IconData> _icons = [
+  final List<IconData> _icons = [
     FontAwesomeIcons.plane,
     FontAwesomeIcons.bed,
     FontAwesomeIcons.person,
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Pages for BottomNavigationBar
   final List<Widget> _pages = [
     HomePage(),
-    PizzaPage(),
+    ThoughtsPage(),
     ProfilePage(),
   ];
 
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.local_pizza,
+              Icons.comment,
               size: 30.0,
             ),
             label: '',
@@ -122,16 +122,56 @@ class HomePage extends StatelessWidget {
 }
 
 // Pizza Page
-class PizzaPage extends StatelessWidget {
+class ThoughtsPage extends StatefulWidget {
+  @override
+  _ThoughtsPageState createState() => _ThoughtsPageState();
+}
+
+class _ThoughtsPageState extends State<ThoughtsPage> {
+  final TextEditingController _controller = TextEditingController();
+  final List<String> _thoughts = [];
+
+  void _addThought() {
+    final thought = _controller.text.trim();
+    if (thought.isNotEmpty) {
+      setState(() {
+        _thoughts.add(thought); // Update the list of thoughts
+        _controller.clear(); // Clear the text field
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pizza Page')),
-      body: Center(
-        child: Text(
-          'Enjoy some delicious pizzas!',
-          style: TextStyle(fontSize: 24.0),
-        ),
+      appBar: AppBar(title: Text('Thoughts Page')),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                labelText: 'Share your thought',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: _addThought,
+            child: Text('Post Thought'),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _thoughts.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_thoughts[index]),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -141,14 +181,190 @@ class PizzaPage extends StatelessWidget {
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Profile Page')),
-      body: Center(
-        child: Text(
-          'This is your profile!',
-          style: TextStyle(fontSize: 24.0),
+      backgroundColor: Color(0xFFE7EBEE),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Profile',
+          style: TextStyle(color: Colors.black),
+        ),
+        leading:
+            IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_rounded)),
+        iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(isDark ? Icons.sunny : Icons.mode_night_outlined)),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      color: Colors.white,
+                      child: Icon(
+                        Icons
+                            .perm_identity, //use the image here instead of icon
+                        size: 70,
+                      ),
+                    ),
+                  )),
+              const SizedBox(height: 20),
+              Center(
+                child: Text(
+                  'Abhay',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  'abhay.23bai10313@vitbhopal.ac.in',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: BorderSide.none,
+                      shape: const StadiumBorder()),
+                  child: Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(),
+              const SizedBox(height: 20),
+
+              //Menu
+              ProfilemenuWidget(
+                title: "Favourites",
+                icon: Icons.favorite_border,
+                onPress: () {},
+                endIcon: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ProfilemenuWidget(
+                title: "My Posts",
+                icon: Icons.analytics_outlined,
+                onPress: () {},
+                endIcon: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ProfilemenuWidget(
+                title: "Saved Posts",
+                icon: Icons.save_alt,
+                onPress: () {},
+                endIcon: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ProfilemenuWidget(
+                title: "Settings",
+                icon: Icons.settings,
+                onPress: () {},
+                endIcon: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ProfilemenuWidget(
+                title: "About us",
+                icon: Icons.info,
+                onPress: () {},
+                endIcon: true,
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class ProfilemenuWidget extends StatelessWidget {
+  const ProfilemenuWidget({
+    required this.title,
+    required this.icon,
+    required this.onPress,
+    required this.endIcon,
+    super.key,
+  });
+
+  final String title;
+  final IconData icon;
+  final VoidCallback onPress;
+  final bool endIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onPress,
+      leading: Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: Color(0xFFECB87A).withOpacity(0.1),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.black,
+        ),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.black),
+      ),
+      trailing: endIcon
+          ? Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Colors.black.withOpacity(0.1),
+              ),
+              child: Icon(
+                Icons.chevron_right_sharp,
+                color: Colors.black,
+              ),
+            )
+          : null,
     );
   }
 }

@@ -74,14 +74,14 @@ class DestinationCarousel extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
+                               /* Text(
                                   '${destination.activities.length} activities',
                                   style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: 1.0,
                                   ),
-                                ),
+                                ),*/
                                 Text(
                                   destination.description,
                                   style: TextStyle(
